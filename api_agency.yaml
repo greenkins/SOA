@@ -4,7 +4,7 @@ info:
   description: API для взаимодействия с квартирными объектами и выполнения агентских задач
   version: 1.0.0
 servers:
-  - url: /api/agency
+  - url: /api/cian/agency
 
 paths:
   /get-cheapest/{id1}/{id2}:

@@ -296,6 +296,37 @@ components:
       allOf:
         - $ref: '#/components/schemas/FlatAllFields'
 
+    FlatCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/FlatUserSetFieldsExistedRestricted'
+
+    FlatId:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 1
+
+    CreationDate:
+      type: string
+      format: date-time
+      example: "2024-10-25T00:00:00Z"
+
+    NotFoundAnswer:
+      allOf:
+        - $ref: '#/components/schemas/FlatNotFoundAnswer'
+
+#    BadRequestAnswer:
+#      allOf:
+#        - $ref: '#/components/schemas/BadRequestAnswer'
+#
+#    ServerErrorAnswer:
+#      allOf:
+#        - $ref: '#/components/schemas/ServerErrorAnswer'
+#
+#    WrongPropertiesAnswer:
+#      allOf:
+#        - $ref: '#/components/schemas/WrongPropertiesAnswer'
+
     FlatUserSetFields:
       type: object
       properties:

@@ -81,23 +81,82 @@ paths:
 
 components:
   schemas:
-    Flat:
+    CheapestFlatResponse:
       type: object
       properties:
-        id:
-          type: integer
-          example: 1
-        name:
+        cheaperFlat:
+          $ref: '#/components/schemas/FlatAllFields'
+        message:
           type: string
-          example: "My Apartment"
-        coordinates:
-          $ref: '#/components/schemas/Coordinates'
-        area:
-          type: number
-          format: float
-          example: 100.5
-        numberOfRooms:
-          type: integer
-          example: 3
+          example: "Квартира с ID 1 дешевле, чем квартира с ID 2"
+
+    OrderedByTimeToMetroResponse:
+      type: object
+      properties:
+        flats:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlatAllFields'
         transport:
-          $ref: '#/components/schemas/Transport'
+          type: string
+          example: "NORMAL"
+        descending:
+          type: boolean
+          example: false
+
+    AgencyErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-10-25T00:00:00Z"
+        status:
+          type: integer
+          example: 404
+        error:
+          type: string
+          example: "Не найдено"
+        path:
+          type: string
+          example: "/agency/get-cheapest/1/2"
+        details:
+          type: string
+          example: "Квартиры с такими ID не найдены"
+
+    BadRequestAgencyAnswer:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-10-25T00:00:00Z"
+        status:
+          type: integer
+          enum:
+            - 400
+        error:
+          type: string
+          example: "Неверный запрос"
+        path:
+          type: string
+          example: "/agency/get-ordered-by-time-to-metro"
+
+    ServerErrorAgencyAnswer:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-10-25T00:00:00Z"
+        status:
+          type: string
+          pattern: 5\d\d
+          example: "500"
+        error:
+          type: string
+          example: "Внутренняя ошибка сервера"
+        path:
+          type: string
+          example: "/agency/get-ordered-by-time-to-metro"
+

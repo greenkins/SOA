@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: Agency Service API
+  description: API для взаимодействия с квартирными объектами и выполнения агентских задач
+  version: 1.0.0
+servers:
+  - url: /api/agency
+
+paths:
+  /get-cheapest/{id1}/{id2}:
+    get:
+      summary: Получить самую дешевую квартиру из двух
+      tags:
+        - agency
+      description: Возвращает квартиру с минимальной стоимостью из двух указанных.
+      parameters:
+        - name: id1
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id2
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Flat'
+        '404':
+          description: Одна из квартир не найдена
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/NotFoundAnswer'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServerErrorAnswer'
+
+  /get-ordered-by-time-to-metro/{by-transport}/{desc}:
+    get:
+      summary: Получить отсортированный список квартир по времени до метро
+      tags:
+        - agency
+      description: Возвращает список квартир, отсортированных по времени до метро (пешком или на транспорте) в указанном порядке (возрастание или убывание).
+      parameters:
+        - name: by-transport
+          in: path
+          required: true
+          schema:
+            type: boolean
+          description: Если true, сортировать по времени на транспорте. Если false, сортировать по пешему времени.
+        - name: desc
+          in: path
+          required: true
+          schema:
+            type: boolean
+          description: Если true, сортировка будет по убыванию.
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Flat'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServerErrorAnswer'
+
+components:
+  schemas:
+    Flat:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "My Apartment"
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        area:
+          type: number
+          format: float
+          example: 100.5
+        numberOfRooms:
+          type: integer
+          example: 3
+        transport:
+          $ref: '#/components/schemas/Transport'

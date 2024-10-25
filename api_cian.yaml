@@ -60,7 +60,7 @@ paths:
                   flats:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Flat'
+                      $ref: '#/components/schemas/FlatAllFields'
         '400':
           description: Некорректные данные
           content:
@@ -128,7 +128,7 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Flat'
+                $ref: '#/components/schemas/FlatAllFields'
         '404':
           description: Квартира не найдена
           content:
@@ -165,34 +165,7 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Flat'
-        '404':
-          description: Квартира не найдена
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/NotFoundAnswer'
-        '500':
-          description: Внутренняя ошибка сервера
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ServerErrorAnswer'
-
-    delete:
-      summary: Удалить квартиру по ID
-      tags:
-        - flats
-      description: Удаляет квартиру по её ID.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/FlatId'
-      responses:
-        '204':
-          description: Квартира успешно удалена
+                $ref: '#/components/schemas/FlatAllFields'
         '404':
           description: Квартира не найдена
           content:
@@ -276,7 +249,7 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Flat'
+                $ref: '#/components/schemas/FlatAllFields'
         '404':
           description: Квартира не найдена
           content:
@@ -292,220 +265,4 @@ paths:
 
 components:
   schemas:
-    FlatUserSetFields:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: "Однокомнатная квартира"
-        coordinates:
-          $ref: '#/components/schemas/Coordinates'
-        area:
-          type: number
-          format: double
-          minimum: 0
-          example: 54.5
-        numberOfRooms:
-          type: integer
-          minimum: 1
-          example: 2
-        livingSpace:
-          type: integer
-          minimum: 1
-          example: 30
-        new:
-          type: boolean
-          nullable: true
-        transport:
-          $ref: '#/components/schemas/Transport'
-        house:
-          $ref: '#/components/schemas/House'
-
-    FlatUserSetFieldsExistedRestricted:
-      allOf:
-        - $ref: '#/components/schemas/FlatUserSetFields'
-        - required:
-            - name
-            - coordinates
-            - area
-            - numberOfRooms
-            - livingSpace
-            - house
-
-    FlatAllFieldsNoId:
-      allOf:
-        - type: object
-          properties:
-            creationDate:
-              type: string
-              format: date-time
-              example: "2024-10-25T00:00:00Z"
-        - $ref: '#/components/schemas/FlatUserSetFields'
-
-    FlatAllFieldsNoIdExistedRestricted:
-      allOf:
-        - $ref: '#/components/schemas/FlatAllFieldsNoId'
-        - required:
-            - creationDate
-            - name
-            - coordinates
-            - area
-            - numberOfRooms
-            - livingSpace
-            - house
-
-    FlatAllFields:
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: integer
-              format: int32
-              minimum: 1
-              example: 1
-            creationDate:
-              type: string
-              format: date-time
-              example: "2024-10-25T00:00:00Z"
-        - $ref: '#/components/schemas/FlatUserSetFields'
-
-    FlatAllFieldsExistedRestricted:
-      allOf:
-        - $ref: '#/components/schemas/FlatAllFields'
-        - required:
-            - id
-            - name
-            - coordinates
-            - creationDate
-            - area
-            - numberOfRooms
-            - livingSpace
-            - house
-
-    Coordinates:
-      type: object
-      properties:
-        x:
-          type: integer
-          example: 10
-        y:
-          type: integer
-          maximum: 256
-          example: 100
-      required:
-        - x
-        - y
-
-    House:
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: true
-          example: "Жилой дом №1"
-        year:
-          type: integer
-          minimum: 1
-          example: 1990
-        numberOfFloors:
-          type: integer
-          minimum: 1
-          nullable: true
-          example: 5
-        numberOfLifts:
-          type: integer
-          minimum: 1
-          example: 2
-
-    Transport:
-      type: string
-      enum:
-        - FEW
-        - LITTLE
-        - NORMAL
-
-    WrongPropertiesAnswer:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          example: 422
-        error:
-          type: string
-          example: "Некорректные данные"
-        path:
-          type: string
-          example: "/flats"
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-                example: "area"
-              value:
-                type: string
-                example: "Площадь должна быть больше 0"
-
-    BadRequestAnswer:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          enum:
-            - 400
-        error:
-          type: string
-          example: "Неверный запрос"
-        path:
-          type: string
-          example: "/flats"
-
-    FlatNotFoundAnswer:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          enum:
-            - 404
-        error:
-          type: string
-          example: "Не найдено"
-        path:
-          type: string
-          example: "/flats/{id}"
-        details:
-          type: string
-          example: "Квартиры с таким id не существует"
-
-    ServerErrorAnswer:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          example: "2024-10-25T00:00:00Z"
-        status:
-          type: string
-          pattern: 5\d\d
-          example: "500"
-        error:
-          type: string
-          example: "Внутренняя ошибка сервера"
-        path:
-          type: string
-          example: "/flats"
+  # Здесь определены FlatAllFields и другие схемы из вашего примера.

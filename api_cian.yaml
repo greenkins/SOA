@@ -79,6 +79,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Flat'
+                xml:
+                  name: Response
         '400':
           description: Некорректные данные
           content:
@@ -140,6 +142,7 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/FlatId'
+
       responses:
         '200':
           description: Успешная операция
@@ -383,18 +386,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/FlatNotFoundAnswer'
 
-#    BadRequestAnswer:
-#      allOf:
-#        - $ref: '#/components/schemas/BadRequestAnswer'
-#
-#    ServerErrorAnswer:
-#      allOf:
-#        - $ref: '#/components/schemas/ServerErrorAnswer'
-#
-#    WrongPropertiesAnswer:
-#      allOf:
-#        - $ref: '#/components/schemas/WrongPropertiesAnswer'
-
     FlatUserSetFields:
       type: object
       properties:
@@ -461,6 +452,8 @@ components:
     FlatAllFields:
       allOf:
         - type: object
+          xml:
+            name: Flat
           properties:
             id:
               type: integer
@@ -488,6 +481,8 @@ components:
 
     Coordinates:
       type: object
+      xml:
+        name: Coordinates
       properties:
         x:
           type: integer
@@ -502,6 +497,8 @@ components:
 
     House:
       type: object
+      xml:
+        name: House
       properties:
         name:
           type: string

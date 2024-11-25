@@ -46,6 +46,24 @@ paths:
           schema:
             type: string
             example: area>50,name~Kia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  minimum: 1
+                  description: Номер страницы (по умолчанию 1).
+                  example: 1
+                size:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Количество записей на странице (по умолчанию 10).
+                  example: 10
       responses:
         '200':
           description: Успешная операция
@@ -305,6 +323,40 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/ServerErrorAnswer'
+
+  /enums/transport:
+    get:
+      summary: Получить значения перечисления Transport
+      tags:
+        - enums
+      description: Возвращает доступные значения перечисления Transport.
+      responses:
+        '200':
+          description: Успешная операция
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enumName:
+                    type: string
+                    description: Название перечисления.
+                    example: "Transport"
+                  values:
+                    type: array
+                    items:
+                      type: string
+                      enum:
+                        - FEW
+                        - LITTLE
+                        - NORMAL
+                      example: "NORMAL"
+        '400':
+          description: Неверное имя перечисления.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
 
 components:
   schemas:

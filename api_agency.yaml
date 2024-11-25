@@ -75,6 +75,24 @@ paths:
           schema:
             type: boolean
           description: Если true, сортировка будет по убыванию.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                  minimum: 1
+                  description: Номер страницы (по умолчанию 1).
+                  example: 1
+                size:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Количество записей на странице (по умолчанию 10).
+                  example: 10
       responses:
         '200':
           description: Успешная операция

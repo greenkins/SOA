@@ -31,6 +31,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Flat'
+        '400':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '404':
           description: Одна из квартир не найдена
           content:
@@ -43,6 +49,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/ServerErrorAnswer'
+        '503':
+          description: Сервис недоступен
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServerErrorAgencyAnswer'
 
   /get-ordered-by-time-to-metro/{by-transport}/{desc}:
     get:
@@ -72,15 +84,62 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Flat'
+        '400':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '500':
           description: Внутренняя ошибка сервера
           content:
             application/xml:
               schema:
                 $ref: '#/components/schemas/ServerErrorAnswer'
+        '503':
+          description: Сервис недоступен
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServerErrorAgencyAnswer'
 
 components:
   schemas:
+    Agency:
+      allOf:
+        - $ref: '#/components/schemas/AgencyAllFields'
+
+    AgencyCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/AgencyUserSetFieldsExistedRestricted'
+
+    AgencyId:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 101
+
+    CreationDate:
+      type: string
+      format: date-time
+      example: "2024-10-25T00:00:00Z"
+
+    NotFoundAnswer:
+      allOf:
+        - $ref: '#/components/schemas/AgencyNotFoundAnswer'
+
+    BadRequestAnswer:
+      allOf:
+        - $ref: '#/components/schemas/BadRequestAnswer'
+
+    ServerErrorAnswer:
+      allOf:
+        - $ref: '#/components/schemas/ServerErrorAnswer'
+
+    WrongPropertiesAnswer:
+      allOf:
+        - $ref: '#/components/schemas/WrongPropertiesAnswer'
+
     CheapestFlatResponse:
       type: object
       properties:
@@ -159,4 +218,5 @@ components:
         path:
           type: string
           example: "/agency/get-ordered-by-time-to-metro"
+
 

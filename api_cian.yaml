@@ -129,8 +129,14 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Flat'
-        '404':
-          description: Квартира не найдена
+        '400':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
+        '422':
+          description: Квартира не может быть отображена
           content:
             application/xml:
               schema:
@@ -166,12 +172,24 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Flat'
+        '400':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '404':
           description: Квартира не найдена
           content:
             application/xml:
               schema:
                 $ref: '#/components/schemas/NotFoundAnswer'
+        '422':
+          description: Квартира не может быть обновлена
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '500':
           description: Внутренняя ошибка сервера
           content:
@@ -199,6 +217,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/NotFoundAnswer'
+        '422':
+          description: Квартира не может быть удалена
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '500':
           description: Внутренняя ошибка сервера
           content:
@@ -222,12 +246,24 @@ paths:
       responses:
         '204':
           description: Квартира успешно удалена
+        '400':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '404':
           description: Квартира не найдена
           content:
             application/xml:
               schema:
                 $ref: '#/components/schemas/NotFoundAnswer'
+        '422':
+          description: Квартира не может быть удалена
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '500':
           description: Внутренняя ошибка сервера
           content:
@@ -251,34 +287,14 @@ paths:
       responses:
         '204':
           description: Квартиры успешно удалены
+        '400':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestAnswer'
         '404':
           description: Квартиры не найдены
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/NotFoundAnswer'
-        '500':
-          description: Внутренняя ошибка сервера
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ServerErrorAnswer'
-
-  /flats/max-rooms:
-    get:
-      summary: Получить квартиру с максимальным количеством комнат
-      tags:
-        - flats
-      description: Возвращает квартиру с максимальным количеством комнат.
-      responses:
-        '200':
-          description: Успешная операция
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Flat'
-        '404':
-          description: Квартира не найдена
           content:
             application/xml:
               schema:
@@ -467,9 +483,6 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          example: 422
         error:
           type: string
           example: "Некорректные данные"
@@ -495,10 +508,6 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          enum:
-            - 400
         error:
           type: string
           example: "Неверный запрос"
@@ -513,10 +522,6 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          enum:
-            - 404
         error:
           type: string
           example: "Не найдено"
@@ -534,10 +539,6 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: string
-          pattern: 5\d\d
-          example: "500"
         error:
           type: string
           example: "Внутренняя ошибка сервера"

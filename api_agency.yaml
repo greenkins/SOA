@@ -48,7 +48,7 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/ServerErrorAnswer'
+                $ref: '#/components/schemas/ServerErrorAgencyAnswer'
         '503':
           description: Сервис недоступен
           content:
@@ -75,24 +75,7 @@ paths:
           schema:
             type: boolean
           description: Если true, сортировка будет по убыванию.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                page:
-                  type: integer
-                  minimum: 1
-                  description: Номер страницы (по умолчанию 1).
-                  example: 1
-                size:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: Количество записей на странице (по умолчанию 10).
-                  example: 10
+
       responses:
 
         '200':
@@ -105,25 +88,30 @@ paths:
                   $ref: '#/components/schemas/Flat'
                 xml:
                   name: Response
-
         '400':
           description: Некорректные данные
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/BadRequestAnswer'
+                $ref: '#/components/schemas/BadRequestAgencyAnswer'
+        '404':
+          description: Некорректные данные
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/NotFoundAnswer'
         '500':
           description: Внутренняя ошибка сервера
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/ServerErrorAnswer'
+                $ref: '#/components/schemas/ServerErrorAgencyAnswer'
         '503':
           description: Сервис недоступен
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/ServerErrorAgencyAnswer'
+                $ref: '#/components/schemas/ServerMalfunctionAgencyAnswer'
 
 components:
   schemas:
@@ -194,9 +182,6 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          example: 404
         error:
           type: string
           example: "Не найдено"
@@ -214,16 +199,14 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: integer
-          enum:
-            - 400
         error:
           type: string
           example: "Неверный запрос"
         path:
           type: string
           example: "/agency/get-ordered-by-time-to-metro"
+
+
 
     ServerErrorAgencyAnswer:
       type: object
@@ -232,13 +215,23 @@ components:
           type: string
           format: date-time
           example: "2024-10-25T00:00:00Z"
-        status:
-          type: string
-          pattern: 5\d\d
-          example: "500"
         error:
           type: string
           example: "Внутренняя ошибка сервера"
+        path:
+          type: string
+          example: "/agency/get-ordered-by-time-to-metro"
+
+    ServerMalfunctionAgencyAnswer:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-10-25T00:00:00Z"
+        error:
+          type: string
+          example: "Сервер недоступен"
         path:
           type: string
           example: "/agency/get-ordered-by-time-to-metro"
